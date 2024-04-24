@@ -4,8 +4,10 @@ import Layout from "../components/Layout";
 const Home = () => {
   return (
     <Layout>
-      <div className="bg-red-500 h-full">
-        <h1>Home</h1>
+      <div className="bg-red-500 h-screen ">
+        <h1>
+          Home
+        </h1>
       </div>
     </Layout>
   );
