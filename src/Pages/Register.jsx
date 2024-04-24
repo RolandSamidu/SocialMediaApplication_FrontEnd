@@ -85,14 +85,13 @@ const Register = () => {
               <img
                 src={"assets/images/LogRegImage.png"}
                 className="w-full"
-                alt="Phone image"
+                alt="Phoneimage"
               />
             </div>
 
-            {/* Right column container with form */}
             <div className="md:w-8/12 lg:ml-6 lg:w-5/12">
               <form onSubmit={handleSubmit(onSubmit)}>
-                {/* User's Name input */}
+             
                 <TEInput
                   type="text"
                   label="User's Name"
@@ -117,7 +116,7 @@ const Register = () => {
                   {errors.email?.message}
                 </p>
 
-                {/* Password input */}
+              
                 <TEInput
                   type="password"
                   label="Password"
