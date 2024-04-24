@@ -10,7 +10,7 @@ const MainSideBar = ({ user }) => {
       console.error("Logout failed", error);
     }
   };
-
+  console.log(user?.profileImage);
   return (
     <div>
       {" "}
@@ -21,11 +21,12 @@ const MainSideBar = ({ user }) => {
           <div className="flex items-center justify-between px-8 py-5">
             <div className="flex items-center mr-5">
               <div className="mr-5">
-                <div className="inline-block relative shrink-0 cursor-pointer rounded-[.95rem]">
+                <div className="">
                   <img
-                    className="w-[50px] h-[50px] shrink-0 inline-block rounded-full border-gray-400 border-2 "
+                    className="w-[50px] h-[50px] rounded-full border-gray-400 border-2 "
                     src={user?.profileImage}
                     alt="profile"
+                   
                   />
                 </div>
               </div>

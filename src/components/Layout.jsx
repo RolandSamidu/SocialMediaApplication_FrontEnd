@@ -7,30 +7,30 @@ import { useNavigate } from "react-router-dom";
 
 const Layout = ({ children }) => {
   const [user, setUser] = useState({});
-const navigate = useNavigate();
- useEffect(() => {
-   const userData = localStorage.getItem("user");
-   if (!userData) {
-     fetchUser();
-   }
-   setUser(JSON.parse(userData));
- // eslint-disable-next-line react-hooks/exhaustive-deps
- }, []);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (!userData) {
+      fetchUser();
+    }
+    setUser(JSON.parse(userData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
- const fetchUser = async () => {
-   try {
-     const res = await axios.get("http://localhost:8080/api/user", {
-       withCredentials: true,
-     });
-     console.log(res)
-     localStorage.setItem("user", JSON.stringify(res.data));
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/user", {
+        withCredentials: true,
+      });
+      console.log(res);
+      localStorage.setItem("user", JSON.stringify(res.data));
       setUser(res.data);
-   } catch (error) {
-     if (error.response.status === 401) {
-       navigate("/login");
-     }
-   }
- };
+    } catch (error) {
+      if (error.response.status === 401) {
+        navigate("/login");
+      }
+    }
+  };
 
   return (
     <div className="flex h-full">
