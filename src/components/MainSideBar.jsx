@@ -12,10 +12,10 @@ const MainSideBar = ({ user }) => {
   };
   console.log(user?.profileImage);
   return (
-    <div>
+    <div className="bg-indigo-100">
       {" "}
-      <div className=" flex flex-col bg-white">
-        <aside className="group/sidebar flex flex-col shrink-0 lg:w-[300px] w-[250px] transition-all duration-300 ease-in-out m-0 fixed  bg-white border-r border-r-dashed border-r-neutral-200   loopple-fixed-start">
+      <div className=" flex flex-col bg-indigo-100">
+        <aside className="group/sidebar flex flex-col shrink-0 lg:w-[300px] w-[250px] transition-all duration-300 ease-in-out m-0 fixed  bg-indigo-100 border-r border-r-dashed border-r-neutral-200   loopple-fixed-start">
           <div className="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
 
           <div className="flex items-center justify-between px-8 py-5">
@@ -45,7 +45,7 @@ const MainSideBar = ({ user }) => {
                 <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                   <Link
                     to="/"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
+                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
                   >
                     Home
                   </Link>
@@ -56,7 +56,7 @@ const MainSideBar = ({ user }) => {
                 <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                   <Link
                     to="/post"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
+                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
                   >
                     Post
                   </Link>
@@ -66,10 +66,10 @@ const MainSideBar = ({ user }) => {
               <div>
                 <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                   <Link
-                    to="/post"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
+                    to="/workoutStatus"
+                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
                   >
-                    Post
+                    Workout Status
                   </Link>
                 </span>
               </div>
@@ -77,16 +77,49 @@ const MainSideBar = ({ user }) => {
               <div>
                 <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                   <Link
-                    to="/post"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
+                    to="/workoutPlan"
+                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
                   >
-                    Post
+                    Workout Plan
                   </Link>
                 </span>
               </div>
 
               <div>
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem] bg-red-500  text-white">
+                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <Link
+                    to="/mealPlan"
+                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                  >
+                    Meal Plan
+                  </Link>
+                </span>
+              </div>
+
+              <div>
+                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <Link
+                    to="/profile"
+                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                  >
+                    Profile
+                  </Link>
+                </span>
+              </div>
+
+              <div>
+                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <Link
+                    to="/profile"
+                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                  >
+                    Setting
+                  </Link>
+                </span>
+              </div>
+
+              <div className="my-10">
+                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem] bg-indigo-500  text-white">
                   <button className="" onClick={handleLogout}>
                     Logout
                   </button>
