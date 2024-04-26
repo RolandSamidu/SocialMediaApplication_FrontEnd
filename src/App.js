@@ -4,6 +4,7 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Home from './Pages/Home';
 import Post from './Pages/Post';
+import WorkoutStatus from './Pages/WorkoutStatus';
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/Register" element={<Register />} />
         <Route path="/" element={<Home />} />
         <Route path="/post" element={<Post />} />
+        <Route path="/WorkoutStatus" element={<WorkoutStatus />} />
       </Routes>
     </BrowserRouter>
   );
