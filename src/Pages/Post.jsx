@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { LayoutGroup } from "framer-motion";
 
 const storage = getStorage(app);
 
@@ -149,38 +150,58 @@ const Post = () => {
     }
   }
 
+ 
   const onSubmit = async (data) => {
-
     if (!editPost) {
-      if (!video) {
+      if (!imageSelected && !video) {
         setError("video", {
           type: "manual",
           message: "Video is required",
         });
         return;
       }
+
+      if (images.length === 0) {
+        setError("images", {
+          type: "manual",
+          message: "Please select at least one image",
+        });
+        return;
+      }
     }
 
+    console.log(user);
     if (user) {
       if (imageSelected) {
+        const imageUrls = [];
+
+        for (const image of images) {
+          const imageRef = ref(storage, `images/${image.name}`);
+          await uploadBytes(imageRef, image);
+          const imageUrl = await getDownloadURL(imageRef);
+          imageUrls.push(imageUrl);
+        }
+
+        const updatePost = {
+          id: postId,
+          title: data.title,
+          description: data.description,
+          images: imageUrls.length > 0 ? imageUrls : post.images,
+          userId: user.id,
+          username: user.name,
+          userProfile: user.profileImage,
+        };
+
+        const postData = {
+          title: data.title,
+          description: data.description,
+          images: imageUrls,
+          userId: user.id,
+          username: user.name,
+          userProfile: user.profileImage,
+        };
 
         if (editPost) {
-          const imageUrls = [];
-          for (const image of images) {
-            const imageRef = ref(storage, `images/${image.name}`);
-            await uploadBytes(imageRef, image);
-            const imageUrl = await getDownloadURL(imageRef);
-            imageUrls.push(imageUrl);
-          }
-          const updatePost = {
-            id: postId,
-            title: data.title,
-            description: data.description,
-            images: imageUrls.length > 0 ? imageUrls : post.images,
-            userId: user.id,
-            username: user.name,
-            userProfile: user.profileImage,
-          };
           try {
             const res = await axios.put(
               `http://localhost:8080/posts`,
@@ -193,41 +214,20 @@ const Post = () => {
           } catch (error) {
             console.log(error);
           }
-        } else {
-          const imageUrls = [];
-          for (const image of images) {
-            const imageRef = ref(storage, `images/${image.name}`);
-            await uploadBytes(imageRef, image);
-            const imageUrl = await getDownloadURL(imageRef);
-            imageUrls.push(imageUrl);
-          }
-
-          const postData = {
-            title: data.title,
-            description: data.description,
-            images: imageUrls,
-            userId: user.id,
-            username: user.name,
-            userProfile: user.profileImage,
-          };
-
-          try {
-            const res = await axios.post(
-              "http://localhost:8080/posts",
-              postData
-            );
-            console.log(res);
-            setIsUploadSuccess(true);
-            navigate("/");
-            toast.success("Post uploaded successfully");
-          } catch (error) {
-            console.log(error);
-          }
+        }
+        console.log(postData);
+        try {
+          const res = await axios.post("http://localhost:8080/posts", postData);
+          console.log(res);
+          setIsUploadSuccess(true);
+          navigate("/");
+          toast.success("Post uploaded successfully");
+        } catch (error) {
+          console.log(error);
         }
       }
 
       if (videoSelected) {
-
         let videoUrl = null;
 
         if (video) {
@@ -306,7 +306,6 @@ const Post = () => {
     // eslint-disable-next-line
   }, [post, postId]);
 
-  console.log(post);
   return (
     <Layout>
       <div className="bg-indigo-300">
@@ -343,7 +342,7 @@ const Post = () => {
             {!editPost && (
               <select
                 onChange={(e) => {
-                  if (e.target.value == 1) {
+                  if (e.target.value === 1) {
                     setImageSelected(true);
                     setVideoSelected(false);
                   } else {

@@ -52,7 +52,7 @@ const deletePost = (deletedPost) => {
 
 }
 
- console.log(user)
+
   return (
     <Layout>
       <>

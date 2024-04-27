@@ -8,10 +8,12 @@ import { AiFillDelete } from "react-icons/ai";
 import { AiFillEdit } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const PostsList = ({ post, user, onUpdatePost, onDeletePost }) => {
-  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
+  const navigate = useNavigate();
   const likeBtnClick = async (post) => {
     try {
       const res = await axios.post(
@@ -38,6 +40,7 @@ const PostsList = ({ post, user, onUpdatePost, onDeletePost }) => {
     }
   };
 
+  // console.log(post?.comment?.length);
   return (
     <div>
       <div className="h-full w-full bg-gray-50 flex items-center justify-center">
@@ -151,10 +154,14 @@ const PostsList = ({ post, user, onUpdatePost, onDeletePost }) => {
               )}
               <p> {post?.likeCount} Like</p>
             </div>
-            <div className="flex items-center	gap-3 cursor-pointer">
+            <div
+              className="flex items-center	gap-3 cursor-pointer"
+              onClick={() => setShowModal(true)}
+            >
               <MdOutlineInsertComment size={24} color="blue" />
-              <p className="text-blue-900 "> Comment</p>
+              <p className="text-blue-900 ">{post?.comments?.length} Comment</p>
             </div>
+
             <div className="flex items-center	gap-3 cursor-pointer">
               <FaShareFromSquare size={22} />
               <p> Share</p>
@@ -162,6 +169,20 @@ const PostsList = ({ post, user, onUpdatePost, onDeletePost }) => {
           </div>
         </div>
       </div>
+      {showModal ? (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col bg-white outline-none focus:outline-none w-[600px] h-[600">
+                <div className="text-center font-bold text-xl">
+                  <h1>Comments</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
     </div>
   );
 };
