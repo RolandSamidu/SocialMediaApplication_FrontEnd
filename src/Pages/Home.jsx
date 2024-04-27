@@ -10,6 +10,8 @@ const Home = () => {
     tab1: "tab1",
   });
  const [user, setUser] = useState(null);
+  const [reFetchPost, setReFetchPost] = useState(false);
+
   const handleColorsClick = (value) => {
     if (value === colorsActive) {
       return;
@@ -51,6 +53,20 @@ const deletePost = (deletedPost) => {
   );
 
 }
+
+useEffect(() => {
+  const fetchAllPosts = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:8080/posts"
+      );
+      setPosts(data);
+    } catch (error) {
+      toast.error("Server error");
+    }
+  };
+  fetchAllPosts();
+}, [reFetchPost]);
 
 
   return (
@@ -108,6 +124,8 @@ const deletePost = (deletedPost) => {
                 key={index}
                 onUpdatePost={updatePost}
                 onDeletePost={deletePost}
+                reFetchPost={reFetchPost}
+                setReFetchPost={setReFetchPost}
               />
             );
           })}
