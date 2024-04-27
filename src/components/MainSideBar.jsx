@@ -10,7 +10,7 @@ const MainSideBar = ({ user }) => {
       console.error("Logout failed", error);
     }
   };
-  console.log(user?.profileImage);
+
   return (
     <div className="bg-indigo-100">
       {" "}
