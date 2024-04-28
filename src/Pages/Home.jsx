@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import {  TETabs, TETabsItem } from "tw-elements-react";
+import { TETabs, TETabsItem } from "tw-elements-react";
 import PostsList from "../components/PostsList";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [colorsActive, setColorsActive] = useState({
     tab1: "tab1",
   });
- const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [reFetchPost, setReFetchPost] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleColorsClick = (value) => {
     if (value === colorsActive) {
@@ -23,9 +26,7 @@ const Home = () => {
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:8080/posts"
-        );
+        const { data } = await axios.get("http://localhost:8080/posts");
         setPosts(data);
       } catch (error) {
         toast.error("Server error");
@@ -34,46 +35,49 @@ const Home = () => {
     fetchAllPosts();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const userData = localStorage.getItem("user");
+        setUser(JSON.parse(userData));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
- useEffect(() => {
-   const user = localStorage.getItem("user");
-   setUser(JSON.parse(user));
- }, []);
-
-const updatePost = (updatedPost) => {
-  setPosts((prevPosts) =>
-    prevPosts.map((post) => (post.id === updatedPost.id ? updatedPost : post))
-  );
-};
-
-const deletePost = (deletedPost) => {
-  setPosts((prevPosts) =>
-    prevPosts.filter((post) => post.id !== deletedPost.id)
-  );
-
-}
-
-useEffect(() => {
-  const fetchAllPosts = async () => {
-    try {
-      const { data } = await axios.get(
-        "http://localhost:8080/posts"
-      );
-      setPosts(data);
-    } catch (error) {
-      toast.error("Server error");
-    }
+  const updatePost = (updatedPost) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) => (post.id === updatedPost.id ? updatedPost : post))
+    );
   };
-  fetchAllPosts();
-}, [reFetchPost]);
 
+  const deletePost = (deletedPost) => {
+    setPosts((prevPosts) =>
+      prevPosts.filter((post) => post.id !== deletedPost.id)
+    );
+  };
+
+  useEffect(() => {
+    const fetchAllPosts = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:8080/posts");
+        setPosts(data);
+      } catch (error) {
+        toast.error("Server error");
+      }
+    };
+    fetchAllPosts();
+  }, [reFetchPost]);
 
   return (
     <Layout>
       <>
-        {/* Tab bar */}
-
+        
         <div className="mb-3">
           <TETabs fill>
             <TETabsItem

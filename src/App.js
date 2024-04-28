@@ -5,6 +5,7 @@ import Register from './Pages/Register';
 import Home from './Pages/Home';
 import Post from './Pages/Post';
 import { Toaster } from "react-hot-toast";
+import Profile from './Pages/Profile';
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/post" element={<Post />} />
         <Route path="/post/:postId" element={<Post />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:userId" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
