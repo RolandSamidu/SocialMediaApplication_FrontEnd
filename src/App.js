@@ -4,6 +4,8 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Home from './Pages/Home';
 import Post from './Pages/Post';
+import WorkoutStatus from './Pages/WorkoutStatus';
+import WorkoutPlan from './Pages/WorkoutPlan';
 import { Toaster } from "react-hot-toast";
 import Profile from './Pages/Profile';
 
