@@ -14,6 +14,7 @@ const formSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required().min(6),
   phone: yup.string().required().min(10),
+
 });
 
 const storage = getStorage(app);
@@ -45,6 +46,15 @@ const Register = () => {
   }
 
   const onSubmit = async (data) => {
+
+    if (!image) {
+      setError("image", {
+        type: "manual",
+        message: "Please select at least one image",
+      });
+      return;
+    }
+
     const imageRef = ref(storage, `images/${image.name}`);
     await uploadBytes(imageRef, image);
     const imageUrl = await getDownloadURL(imageRef);

@@ -35,15 +35,15 @@ const Layout = ({ children }) => {
   return (
     <div className="flex h-full bg-indigo-100">
       <div className="flex w-full fixed  ">
-        <Navbar user={user}/>
+        <Navbar user={user} />
       </div>
       <div className="flex  mt-[70px]  w-full ">
         <div className=" flex lg:w-[300px] w-[250px] bg-indigo-100">
           <MainSideBar user={user} />
         </div>
-        <div className="flex-1 ">{children}</div>
+        <div className="flex-1 bg-white">{children}</div>
         <div className="flex lg:w-[300px] w-[250px] bg-indigo-100">
-          <SideBar2 />
+          <SideBar2 logUser={user} />
         </div>
       </div>
     </div>

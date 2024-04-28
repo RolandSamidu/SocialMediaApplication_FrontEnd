@@ -12,6 +12,7 @@ import CreateWorkoutStatus from './Pages/CreateWorkoutStatus';
 import CreateWorkoutPlan from './Pages/CreateWorkoutPlan';
 import MealPlanView from './Pages/MealPlanView';
 
+
 function App() {
   return (
     <BrowserRouter>
