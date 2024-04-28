@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import MealPlan from './Pages/MealPlan';
 import CreateWorkoutStatus from './Pages/CreateWorkoutStatus';
 import CreateWorkoutPlan from './Pages/CreateWorkoutPlan';
+import MealPlanView from './Pages/MealPlanView';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/MealPlan" element={<MealPlan />} />
         <Route path="/CreateWorkoutStatus" element={<CreateWorkoutStatus />} />
         <Route path="/CreateWorkoutPlan" element={<CreateWorkoutPlan />} />
+        <Route path="/MealPlanView" element={<MealPlanView />} />
       </Routes>
     </BrowserRouter>
   );

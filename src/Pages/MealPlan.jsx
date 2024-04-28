@@ -1,219 +1,341 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import backgroundImg from '../images/mealBck1.jpg';
+import { useNavigate } from 'react-router-dom'; 
 
 const MealPlan = () => {
-  const [mealItems, setMealItems] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newItem, setNewItem] = useState({
-    name: '',
+  const [mealPlan, setMealPlan] = useState({
+    mealPlanName: '',
+    mealDescription: '',
+    ingredients: [{ name: '', quantity: '', unit: '' }],
+    cookingInstructions: '',
     calories: '',
     protein: '',
     carbs: '',
     fat: '',
-    quantity: 1,
+    servingSize: '',
+    servingUnit: '',
+    dietaryPreferences: '',
+    mealType: '',
+    tags: [],
+    privacyOption: 'private',
+    sharedUsers: '',
+    image: null // State to hold the uploaded image
   });
 
-  const handleNewItemChange = (e) => {
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewItem((prevItem) => ({
-      ...prevItem,
-      [name]: name === 'name' ? value : value
+    setMealPlan(prevState => ({
+      ...prevState,
+      [name]: value
     }));
   };
 
-  const handleAddNewItem = () => {
-    if (!newItem.name.trim()) {
-      alert('Please enter the name of the item.');
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setMealPlan(prevState => ({
+        ...prevState,
+        image: URL.createObjectURL(e.target.files[0])
+      }));
+    }
+  };
+
+  const removeImage = () => {
+    setMealPlan(prevState => ({
+      ...prevState,
+      image: null
+    }));
+  };
+
+  const handleSubmit = () => {
+    if (!mealPlan.mealPlanName.trim()) {
+      alert('Please enter a name for the meal plan.');
       return;
     }
-    if(newItem.calories === '' || newItem.protein === '' || newItem.carbs === '' || newItem.fat === '') {
+  
+    if (!mealPlan.calories || !mealPlan.protein || !mealPlan.carbs || !mealPlan.fat) {
       alert('Please enter all nutritional values.');
       return;
     }
-    setMealItems((prevItems) => [...prevItems, { ...newItem, id: Date.now() }]);
-    setNewItem({ name: '', calories: '', protein: '', carbs: '', fat: '', quantity: 1 }); // Reset the form
-    setIsEditing(false);
-  };
   
-
-  const handleCancelEdit = () => {
-    setNewItem({ name: '', calories: '', protein: '', carbs: '', fat: '' });
-    setIsEditing(false);
-  };
-
-  
-  const handleIncreaseQuantity = (id) => {
-    setMealItems((currentItems) =>
-      currentItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
-
-  const handleDecreaseQuantity = (id) => {
-    setMealItems((currentItems) =>
-      currentItems.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(item.quantity - 1, 0) } : item
-      )
-    );
-  };
-
-  const handleDeleteItem = (id) => {
-    setMealItems(mealItems.filter((item) => item.id !== id));
-  };
-
-  const handleEditItem = (id) => {
-    const itemToEdit = mealItems.find((item) => item.id === id);
-    if (itemToEdit) {
-      setNewItem({ ...itemToEdit });
-      setIsEditing(true);
-    }
-  };
-  
-  const handleUpdateItem = () => {
-    if (!newItem.name.trim()) {
-      alert('Please enter the name of the item.');
+    if (!mealPlan.servingSize || !mealPlan.servingUnit.trim()) {
+      alert('Please specify the serving size and its unit.');
       return;
     }
-    if(newItem.calories === '' || newItem.protein === '' || newItem.carbs === '' || newItem.fat === '') {
-      alert('Please enter all nutritional values.');
+  
+    if (!mealPlan.dietaryPreferences) {
+      alert('Please select a dietary preference.');
       return;
     }
-    setMealItems((currentItems) =>
-      currentItems.map((item) => (item.id === newItem.id ? { ...newItem } : item))
-    );
-    setNewItem({ name: '', calories: '', protein: '', carbs: '', fat: '', quantity: 1 });
-    setIsEditing(false);
-  };
   
-  const handleAddOrUpdateItem = () => {
-    if (isEditing) {
-      handleUpdateItem();
-    } else {
-      handleAddNewItem();
+    if (!mealPlan.mealType) {
+      alert('Please select a meal type.');
+      return;
     }
-  };
   
-  
-  // Function to calculate totals
-  const calculateTotals = () => {
-    return mealItems.reduce(
-      (totals, item) => {
-        totals.calories += parseFloat(item.calories || 0) * item.quantity;
-        totals.protein += parseFloat(item.protein || 0) * item.quantity;
-        totals.carbs += parseFloat(item.carbs || 0) * item.quantity;
-        totals.fat += parseFloat(item.fat || 0) * item.quantity;
-        return totals;
-      },
-      { calories: 0, protein: 0, carbs: 0, fat: 0 }
-    );
+    console.log('Submitting Meal Plan:', mealPlan);
+    navigate('/mealPlanView', { state: { mealPlan } });
   };
 
-  const totals = calculateTotals();
+
+
+
+  const handleIngredientChange = (index, e) => {
+    const newIngredients = [...mealPlan.ingredients];
+    newIngredients[index][e.target.name] = e.target.value;
+    setMealPlan(prevState => ({
+      ...prevState,
+      ingredients: newIngredients
+    }));
+  };
+
+  const addIngredient = () => {
+    setMealPlan(prevState => ({
+      ...prevState,
+      ingredients: [...prevState.ingredients, { name: '', quantity: '', unit: '' }]
+    }));
+  };
+
+  const removeIngredient = (index) => {
+    const newIngredients = [...mealPlan.ingredients];
+    newIngredients.splice(index, 1);
+    setMealPlan(prevState => ({
+      ...prevState,
+      ingredients: newIngredients
+    }));
+  };
 
   return (
     <Layout>
-       <div
+      <div
         className="container mx-auto p-4"
         style={{
           backgroundImage: `url(${backgroundImg})`,
-          backgroundPosition: 'center', // Centers the image
-          backgroundRepeat: 'no-repeat', // Prevents repeating the image
-          backgroundSize: 'cover', // Covers the entire div
-          backgroundAttachment: 'fixed' // Optional: makes the background fixed during scroll
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed'
         }}>
-        <h1 className="text-3xl font-bold mb-6 text-center">Meal Plan</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Create Meal Plan</h1>
         
         {/* Form for new meal item input */}
-        <div className="mb-4 flex flex-wrap gap-2 justify-center">
+        <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
           <input 
             type="text"
-            name="name"
-            placeholder="Item Name"
-            value={newItem.name}
-            onChange={handleNewItemChange}
-            className="border rounded h-10 w-40 p-2"
+            name="mealPlanName"
+            placeholder="Meal Plan Name"
+            value={mealPlan.mealPlanName}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2"
           />
+          <textarea
+            name="mealDescription"
+            placeholder="Describe your meal plan"
+            value={mealPlan.mealDescription}
+            onChange={handleInputChange}
+            className="border rounded h-20 w-full p-2 mt-4"
+          />
+          {/* Image Upload */}
+        <div className="mb-4">
+          {mealPlan.image && (
+            <>
+              <img src={mealPlan.image} alt="Meal Plan" className="w-full h-64 object-cover rounded-lg mb-4"/>
+              <button onClick={removeImage} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                Remove Image
+              </button>
+            </>
+          )}
+          {!mealPlan.image && (
+            <input 
+              type="file"
+              onChange={handleImageChange}
+              className="border rounded p-2 w-full"
+            />
+          )}
+        </div>
+
+          {/* Ingredients List */}
+          {mealPlan.ingredients.map((ingredient, index) => (
+            <div key={index} className="flex gap-2 mt-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Ingredient Name"
+                value={ingredient.name}
+                onChange={(e) => handleIngredientChange(index, e)}
+                className="border rounded h-10 w-1/3 p-2"
+              />
+              <input
+                type="text"
+                name="quantity"
+                placeholder="Quantity"
+                value={ingredient.quantity}
+                onChange={(e) => handleIngredientChange(index, e)}
+                className="border rounded h-10 w-1/3 p-2"
+              />
+              <input
+                type="text"
+                name="unit"
+                placeholder="Unit (e.g., grams, cups)"
+                value={ingredient.unit}
+                onChange={(e) => handleIngredientChange(index, e)}
+                className="border rounded h-10 w-1/3 p-2"
+              />
+              <button onClick={() => removeIngredient(index)} className="bg-red-500 text-white p-2 rounded">Remove</button>
+            </div>
+          ))}
+          <button onClick={addIngredient} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Add Ingredient</button>
+
+          {/* Cooking Instructions */}
+          <textarea
+            name="cookingInstructions"
+            placeholder="Cooking Instructions"
+            value={mealPlan.cookingInstructions}
+            onChange={handleInputChange}
+            className="border rounded h-20 w-full p-2 mt-4"
+          />
+
+          {/* Nutritional Information */}
+          <div className="flex space-x-2 mt-4">
           <input 
             type="number"
             name="calories"
             placeholder="Calories"
-            value={newItem.calories}
-            onChange={handleNewItemChange}
-            className="border rounded h-10 w-40 p-2"
+            value={mealPlan.calories}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2 mt-4"
           />
+          
           <input 
             type="number"
             name="protein"
             placeholder="Protein (g)"
-            value={newItem.protein}
-            onChange={handleNewItemChange}
-            className="border rounded h-10 w-40 p-2"
+            value={mealPlan.protein}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2 mt-4"
           />
           <input 
             type="number"
             name="carbs"
             placeholder="Carbs (g)"
-            value={newItem.carbs}
-            onChange={handleNewItemChange}
-            className="border rounded h-10 w-40 p-2"
+            value={mealPlan.carbs}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2 mt-4"
           />
           <input 
             type="number"
             name="fat"
             placeholder="Fat (g)"
-            value={newItem.fat}
-            onChange={handleNewItemChange}
-            className="border rounded h-10 w-40 p-2"
+            value={mealPlan.fat}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2 mt-4"
           />
-          
-        </div>
-        <div className="mb-4 flex flex-wrap gap-5 justify-center">
-        <button 
-            onClick={handleAddOrUpdateItem}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          </div>
+          {/* Portion Sizes */}
+          <input 
+            type="number"
+            name="servingSize"
+            placeholder="Serving Size"
+            value={mealPlan.servingSize}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2 mt-4"
+          />
+          <input 
+            type="text"
+            name="servingUnit"
+            placeholder="Serving Unit (e.g., servings, pieces)"
+            value={mealPlan.servingUnit}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2 mt-4"
+          />
+
+          {/* Dietary Preferences */}
+          <select
+            name="dietaryPreferences"
+            value={mealPlan.dietaryPreferences}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2 mt-4"
           >
-            {isEditing ? 'Update Item' : 'Add Item'}
-          </button>
+            <option value="">Select Dietary Preference</option>
+            <option value="vegan">Vegan</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="keto">Keto</option>
+            <option value="gluten-free">Gluten-Free</option>
+          </select>
+
+          {/* Meal Types */}
+          <select
+            name="mealType"
+            value={mealPlan.mealType}
+            onChange={handleInputChange}
+            className="border rounded h-10 w-full p-2 mt-4"
+          >
+            <option value="">Select Meal Type</option>
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="snack">Snack</option>
+          </select>
+
+          {/* Tags */}
+          <input
+            type="text"
+            name="tags"
+            placeholder="Tags (comma separated, e.g., quick, budget)"
+            value={mealPlan.tags.join(', ')}
+            onChange={(e) => setMealPlan(prevState => ({ ...prevState, tags: e.target.value.split(',') }))}
+            className="border rounded h-10 w-full p-2 mt-4"
+          />
+
+          {/* Privacy and Sharing Options */}
+          <fieldset className="mb-4 mt-4">
+            <legend className="text-xl font-bold">Privacy and Sharing Options</legend>
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="privacyOption"
+                value="public"
+                checked={mealPlan.privacyOption === 'public'}
+                onChange={handleInputChange}
+              /> Public
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="radio"
+                name="privacyOption"
+                value="private"
+                checked={mealPlan.privacyOption === 'private'}
+                onChange={handleInputChange}
+              /> Private
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="radio"
+                name="privacyOption"
+                value="shareable"
+                checked={mealPlan.privacyOption === 'shareable'}
+                onChange={handleInputChange}
+              /> Shareable
+            </label>
+            {mealPlan.privacyOption === 'shareable' && (
+              <input
+                type="text"
+                name="sharedUsers"
+                placeholder="Enter usernames or groups"
+                value={mealPlan.sharedUsers}
+                onChange={handleInputChange}
+                className="ml-2 border rounded p-2"
+              />
+            )}
+          </fieldset>
           <button 
-            onClick={handleCancelEdit}
-            className="bg-red-700 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Cancel
-          </button>
-        </div>
-
-       {/* List of meal items */}
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-  {mealItems.map((item) => (
-    <div key={item.id} className="bg-white p-3 shadow rounded-lg space-y-3">
-      <h3 className="text-md font-semibold">{item.name}</h3>
-      <p className="text-sm">Calories: {item.calories}</p>
-      <p className="text-sm">Protein: {item.protein}g</p>
-      <p className="text-sm">Carbs: {item.carbs}g</p>
-      <p className="text-sm">Fat: {item.fat}g</p>
-      <div className="flex items-center justify-between text-sm">
-        <button onClick={() => handleIncreaseQuantity(item.id)} className="bg-green-500 text-white px-8 py-2 rounded hover:bg-green-600 text-sm font-medium">+</button>
-        <span>{item.quantity}</span>
-        <button onClick={() => handleDecreaseQuantity(item.id)} className="bg-red-500 text-white px-8 py-2 rounded hover:bg-red-600 text-sm font-medium">-</button>
-      </div>
-      <div className="flex justify-between text-sm">
-        <button onClick={() => handleEditItem(item.id)} className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 text-xs font-medium">Edit</button>
-        <button onClick={() => handleDeleteItem(item.id)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-xs font-medium">Delete</button>
-      </div>
-    </div>
-  ))}
-</div>
-
-
-        {/* Total Nutrients */}
-        <div className="mt-6 p-4 bg-white rounded shadow">
-          <h3 className="text-xl font-bold mb-4">Total Nutrients</h3>
-          <p>Total Calories: {totals.calories}</p>
-          <p>Total Protein: {totals.protein}g</p>
-          <p>Total Carbs: {totals.carbs}g</p>
-          <p>Total Fat: {totals.fat}g</p>
+          onClick={handleSubmit}
+          className="mt-4 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+        >
+          Share
+        </button>
         </div>
       </div>
     </Layout>
