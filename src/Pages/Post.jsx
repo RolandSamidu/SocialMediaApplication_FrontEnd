@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import { TEInput, TERipple, TETextarea } from "tw-elements-react";
+import { TEInput } from "tw-elements-react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../db/firebase";
 import * as yup from "yup";
@@ -9,7 +9,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { LayoutGroup } from "framer-motion";
 
 const storage = getStorage(app);
 
@@ -150,7 +149,6 @@ const Post = () => {
     }
   }
 
- 
   const onSubmit = async (data) => {
     if (!editPost) {
       if (!imageSelected && !video) {
@@ -161,7 +159,7 @@ const Post = () => {
         return;
       }
 
-      if (images.length === 0) {
+      if (!videoSelected && images.length === 0) {
         setError("images", {
           type: "manual",
           message: "Please select at least one image",
@@ -214,16 +212,20 @@ const Post = () => {
           } catch (error) {
             console.log(error);
           }
-        }
-        console.log(postData);
-        try {
-          const res = await axios.post("http://localhost:8080/posts", postData);
-          console.log(res);
-          setIsUploadSuccess(true);
-          navigate("/");
-          toast.success("Post uploaded successfully");
-        } catch (error) {
-          console.log(error);
+        } else {
+          console.log(postData);
+          try {
+            const res = await axios.post(
+              "http://localhost:8080/posts",
+              postData
+            );
+            console.log(res);
+            setIsUploadSuccess(true);
+            navigate("/");
+            toast.success("Post uploaded successfully");
+          } catch (error) {
+            console.log(error);
+          }
         }
       }
 
@@ -308,15 +310,15 @@ const Post = () => {
 
   return (
     <Layout>
-      <div className="bg-indigo-300">
-        <h1 className="mb-2 mt-5 text-xl item-center font-medium leading-tight text-indigo-600">
-          ADD NEW POST
+      <div className="-z-50">
+        <h1 className="text-xl item-center uppercase leading-tight text-center mt-5 font-bold mb-6 ">
+          {editPost ? "Edit Post" : "Add Post"}
         </h1>
 
-        <div className="flex w-full items-center justify-center bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+        <div className="flex w-full   justify-center bg-white p-6 ">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="w-full max-w-lg space-y-6"
+            className="w-full max-w-lg space-y-6 -z-0"
           >
             <div className="w-full">
               <TEInput
@@ -324,20 +326,28 @@ const Post = () => {
                 label="Topic"
                 {...register("title")}
                 isInvalid={errors.title}
-                className="mb-6"
+                className="mb-1"
               ></TEInput>
-              {errors.title && <p>{errors.title.message}</p>}
+              {errors.title && (
+                <p className="text-xs mt-1 mb-1 text-red-500">
+                  {errors.title.message}
+                </p>
+              )}
             </div>
             <div className="w-full">
               <TEInput
                 id="textareaExample"
                 label="Description"
                 rows={4}
-                className="mb-6 resize-none"
+                className="mb-1 resize-none"
                 {...register("description")}
                 isInvalid={errors.description}
               ></TEInput>
-              {errors.description && <p>{errors.description.message}</p>}
+              {errors.description && (
+                <p className="text-xs mt-1 mb-1 text-red-500">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
             {!editPost && (
               <select
@@ -437,7 +447,7 @@ const Post = () => {
 
             <button
               type="submit"
-              className="flex w-full rounded text-center bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]]"
+              className="flex w-full rounded  items-center justify-center  bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
             >
               {isSubmitting ? "uploading....." : "post"}
             </button>

@@ -3,7 +3,7 @@ import React from 'react'
 const Navbar = ({user}) => {
   
   return (
-    <div className="bg-indigo-500 flex w-full h-[70px] ">
+    <div className="bg-indigo-500 flex w-full h-[70px] z-50">
       <div className="flex items-center justify-between w-full px-4">
         <div className="flex items-center">
           <div className="text-white text-lg font-semibold">Social Fitness Club</div>

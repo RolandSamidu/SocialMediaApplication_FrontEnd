@@ -125,12 +125,12 @@ const PostsList = ({
               <div className="flex flex-col">
                 <b className="mb-2 capitalize">{post?.username}</b>
                 <time datetime="06-08-21" className="text-gray-400 text-xs">
-                  <TimeAgo date={post.date} />
+                  <TimeAgo date={post?.date} />
                 </time>
               </div>
             </div>
             <div className="bg-gray-100	rounded-full h-3.5 flex	items-center justify-center gap-3">
-              {user.id === post.userId && (
+              {user?.id === post?.userId && (
                 <>
                   <AiFillDelete
                     size={20}
@@ -205,7 +205,7 @@ const PostsList = ({
           </div>
           <div className=" h-16 border-b  flex items-center justify-around	">
             <div className="flex items-center	gap-3	cursor-pointer">
-              {post?.likedBy?.includes(user.id) ? (
+              {post?.likedBy?.includes(user?.id) ? (
                 <>
                   <FaHeart
                     size={24}
@@ -280,7 +280,7 @@ const PostsList = ({
                             </div>
                           </div>
                           <div className="flex flex-col gap-5 px-5">
-                            {user.id === comment.commentById && (
+                            {user?.id === comment?.commentById && (
                               <>
                                 <AiFillDelete
                                   onClick={() => deleteComment(comment)}

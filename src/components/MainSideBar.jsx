@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
 
 const MainSideBar = ({ user }) => {
   const handleLogout = async () => {
@@ -15,7 +16,7 @@ const MainSideBar = ({ user }) => {
     <div className="bg-indigo-100">
       {" "}
       <div className=" flex flex-col bg-indigo-100">
-        <aside className="group/sidebar flex flex-col shrink-0 lg:w-[300px] w-[250px] transition-all duration-300 ease-in-out m-0 fixed  bg-indigo-100 border-r border-r-dashed border-r-neutral-200   loopple-fixed-start">
+        <aside className="flex flex-col shrink-0 lg:w-[300px] w-[250px]  m-0 fixed  bg-indigo-100 border-r border-r-dashed border-r-neutral-200  min-h-full">
           <div className="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
 
           <div className="flex items-center justify-between px-8 py-5">
@@ -23,10 +24,9 @@ const MainSideBar = ({ user }) => {
               <div className="mr-5">
                 <div className="">
                   <img
-                    className="w-[50px] h-[50px] rounded-full border-gray-400 border-2 "
+                    className="w-[50px] h-[50px] min-w-[50px] rounded-full border-gray-400 border-2 "
                     src={user?.profileImage}
                     alt="profile"
-                   
                   />
                 </div>
               </div>
@@ -39,88 +39,133 @@ const MainSideBar = ({ user }) => {
 
           <div className="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
 
-          <div className="relative pl-3 my-5 overflow-y-scroll">
+          <div className="relative pl-3 my-5 ">
             <div className="flex flex-col w-full font-medium">
               <div>
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                  <Link
+                <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <NavLink
                     to="/"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                    className={({ isActive, isPending }) =>
+                      isPending
+                        ? "pending"
+                        : isActive
+                        ? "flex items-center rounded-lg w-full px-2 py-1 h-10 bg-primary  text-white"
+                        : "flex items-center rounded-lg w-full px-2 py-1 h-10  text-black"
+                    }
                   >
                     Home
-                  </Link>
+                  </NavLink>
                 </span>
               </div>
 
               <div>
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                  <Link
+                <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <NavLink
                     to="/post"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                    className={({ isActive, isPending }) =>
+                      isPending
+                        ? "pending"
+                        : isActive
+                        ? "flex items-center rounded-lg w-full px-2 py-1 h-10 bg-primary  text-white"
+                        : "flex items-center rounded-lg w-full px-2 py-1 h-10  text-black"
+                    }
                   >
                     Post
-                  </Link>
+                  </NavLink>
                 </span>
               </div>
 
               <div>
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                  <Link
+                <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <NavLink
                     to="/workoutStatus"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                    className={({ isActive, isPending }) =>
+                      isPending
+                        ? "pending"
+                        : isActive
+                        ? "flex items-center rounded-lg w-full px-2 py-1 h-10 bg-primary  text-white"
+                        : "flex items-center rounded-lg w-full px-2 py-1 h-10  text-black"
+                    }
                   >
                     Workout Status
-                  </Link>
+                  </NavLink>
                 </span>
               </div>
 
               <div>
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                  <Link
+                <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <NavLink
                     to="/workoutPlan"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                    className={({ isActive, isPending }) =>
+                      isPending
+                        ? "pending"
+                        : isActive
+                        ? "flex items-center rounded-lg w-full px-2 py-1 h-10 bg-primary  text-white"
+                        : "flex items-center rounded-lg w-full px-2 py-1 h-10  text-black"
+                    }
                   >
                     Workout Plan
-                  </Link>
+                  </NavLink>
                 </span>
               </div>
 
               <div>
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                  <Link
+                <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <NavLink
                     to="/mealPlan"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                    className={({ isActive, isPending }) =>
+                      isPending
+                        ? "pending"
+                        : isActive
+                        ? "flex items-center rounded-lg w-full px-2 py-1 h-10 bg-primary  text-white"
+                        : "flex items-center rounded-lg w-full px-2 py-1 h-10  text-black"
+                    }
                   >
                     Meal Plan
-                  </Link>
+                  </NavLink>
                 </span>
               </div>
 
               <div>
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                  <Link
+                <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <NavLink
                     to="/profile"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                    className={({ isActive, isPending }) =>
+                      isPending
+                        ? "pending"
+                        : isActive
+                        ? "flex items-center rounded-lg w-full px-2 py-1 h-10 bg-primary  text-white"
+                        : "flex items-center rounded-lg w-full px-2 py-1 h-10  text-black"
+                    }
                   >
                     Profile
-                  </Link>
+                  </NavLink>
                 </span>
               </div>
 
               <div>
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                  <Link
+                <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                  <NavLink
                     to="/profile"
-                    className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-black hover:text-dark"
+                    className={({ isActive, isPending }) =>
+                      isPending
+                        ? "pending"
+                        : isActive
+                        ? "flex items-center rounded-lg w-full px-2 py-1 h-10 bg-primary  text-white"
+                        : "flex items-center rounded-lg w-full px-2 py-1 h-10  text-black"
+                    }
                   >
                     Setting
-                  </Link>
+                  </NavLink>
                 </span>
               </div>
 
-              <div className="my-10">
-                <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem] bg-indigo-500  text-white">
-                  <button className="" onClick={handleLogout}>
+              <div className="my-5">
+                <span className="select-none flex items-center px-4 py-[.175rem] cursor-pointer my-[.1rem] rounded-[.95rem]   text-white">
+                  <button
+                    className="flex items-center rounded-lg w-full px-2 h-10 bg-red-600 text-white"
+                    onClick={handleLogout}
+                  >
                     Logout
                   </button>
                 </span>
