@@ -78,7 +78,7 @@ const MainSideBar = ({ user }) => {
               <div>
                 <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                   <NavLink
-                    to="/workoutStatus"
+                    to="/CreateWorkoutStatus"
                     className={({ isActive, isPending }) =>
                       isPending
                         ? "pending"
@@ -95,7 +95,7 @@ const MainSideBar = ({ user }) => {
               <div>
                 <span className="select-none flex items-center px-4 py-[.375rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                   <NavLink
-                    to="/workoutPlan"
+                    to="/CreateWorkoutPlan"
                     className={({ isActive, isPending }) =>
                       isPending
                         ? "pending"

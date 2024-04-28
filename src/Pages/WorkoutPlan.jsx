@@ -25,7 +25,7 @@ const WorkoutPlan = () => {
   };
 
   return (
-    <Layout>
+    // <Layout>
       <div className="p-4">
       <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Workout Plan Summary</h1>
@@ -49,7 +49,7 @@ const WorkoutPlan = () => {
           ))}
         </div>
       </div>
-    </Layout>
+    // </Layout>
   );
 };
 

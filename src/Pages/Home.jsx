@@ -4,23 +4,14 @@ import { TETabs, TETabsItem } from "tw-elements-react";
 import PostsList from "../components/PostsList";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import WorkoutStatus from "./WorkoutStatus";
+import WorkoutPlan from "./WorkoutPlan";
+import { useActiveTab } from "../context/ActiveTabContext";
 
 const Home = () => {
-  const [colorsActive, setColorsActive] = useState({
-    tab1: "tab1",
-  });
+  const { activeTab, setActiveTab } = useActiveTab();
   const [user, setUser] = useState(null);
   const [reFetchPost, setReFetchPost] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleColorsClick = (value) => {
-    if (value === colorsActive) {
-      return;
-    }
-    setColorsActive({ ...colorsActive, ...value });
-  };
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -47,7 +38,6 @@ const Home = () => {
     };
 
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updatePost = (updatedPost) => {
@@ -77,41 +67,32 @@ const Home = () => {
   return (
     <Layout>
       <>
-        
-        <div className="mb-3">
-          <TETabs fill>
+        <div className="mb-3 ">
+          <TETabs fill className="">
             <TETabsItem
-              onClick={() =>
-                handleColorsClick({ ...colorsActive, tab1: "tab1" })
-              }
-              active={colorsActive.tab1 === "tab1"}
+              onClick={() => setActiveTab("tab1")}
+              active={activeTab === "tab1" || activeTab === "" ? true : false}
               color="primary"
             >
               Daily Post
             </TETabsItem>
             <TETabsItem
-              onClick={() =>
-                handleColorsClick({ ...colorsActive, tab1: "tab1" })
-              }
-              active={colorsActive.tab1 === "tab1"}
+              onClick={() => setActiveTab("tab2")}
+              active={activeTab === "tab2" ? true : false}
               color="primary"
             >
               Workout Status
             </TETabsItem>
             <TETabsItem
-              onClick={() =>
-                handleColorsClick({ ...colorsActive, tab1: "tab1" })
-              }
-              active={colorsActive.tab1 === "tab1"}
+              onClick={() => setActiveTab("tab3")}
+              active={activeTab === "tab3" ? true : false}
               color="primary"
             >
               Workout Plan
             </TETabsItem>
             <TETabsItem
-              onClick={() =>
-                handleColorsClick({ ...colorsActive, tab1: "tab1" })
-              }
-              active={colorsActive.tab1 === "tab1"}
+              onClick={() => setActiveTab("tab4")}
+              active={activeTab === "tab4" ? true : false}
               color="primary"
             >
               Meal Plan
@@ -119,7 +100,51 @@ const Home = () => {
           </TETabs>
         </div>
 
-        <div>
+        {activeTab === "tab1" && (
+          <div>
+            {posts?.map((post, index) => {
+              return (
+                <PostsList
+                  post={post}
+                  user={user}
+                  key={index}
+                  onUpdatePost={updatePost}
+                  onDeletePost={deletePost}
+                  reFetchPost={reFetchPost}
+                  setReFetchPost={setReFetchPost}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {activeTab === "tab2" && (
+          <div>
+            {/**
+             * 1. Create a new component called WorkoutStatusList
+             */}
+            <WorkoutStatus user={user} />
+          </div>
+        )}
+
+        {activeTab === "tab3" && (
+          <div>
+            {/**
+             * 1. Create a new component called WorkoutPlanList
+             */}
+            <WorkoutPlan />
+          </div>
+        )}
+
+        {activeTab === "tab4" && (
+          <div>
+            {/**
+             * 1. Create a new component called MealPlanList
+             */}
+          </div>
+        )}
+
+        {/* <div>
           {posts?.map((post, index) => {
             return (
               <PostsList
@@ -133,7 +158,7 @@ const Home = () => {
               />
             );
           })}
-        </div>
+        </div> */}
       </>
     </Layout>
   );

@@ -1,77 +1,109 @@
-import React from 'react'
-import Layout from '../components/Layout'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
-const WorkoutStatus = () => {
+const WorkoutStatus = ({ user }) => {
+  const [workoutStatuses, setWorkoutStatuses] = useState([]);
 
-    // Dummy data, replace with actual data retrieval logic
-    const workoutStatuses = [
-      {
-        date: '2022-07-01',
-        distance: '5 km',
-        pushups: '30',
-        weight: '50 kg',
-        description: 'Had a great run in the park and did some push-ups after.',
-      },
-      {
-        date: '2022-07-01',
-        distance: '5 km',
-        pushups: '30',
-        weight: '50 kg',
-        description: 'Had a great run in the park and did some push-ups after.',
-      },
-      {
-        date: '2022-07-01',
-        distance: '5 km',
-        pushups: '30',
-        weight: '50 kg',
-        description: 'Had a great run in the park and did some push-ups after.',
-      },
-      
-    ];
-      // Add more workout statuses here
-      const navigate = useNavigate();
+  const navigate = useNavigate();
 
-      // Function to handle click event
-      const goToWorkoutStatus = () => {
-        navigate('/CreateWorkoutStatus'); // Use the route you want to navigate to
-      };
-  
-      return (
-        <Layout>
-          <div className="p-4">
-            <div className="flex justify-between items-center">
-              <h1 className="text-3xl text-center font-semibold mb-4">
-                Workout Statuses
-              </h1>
-              <button
-                onClick={goToWorkoutStatus}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-              >
-                Create Workout Status
-              </button>
-            </div>
-            
-            {/* Workout Status Cards */}
-            <div className="space-y-4">
-            {workoutStatuses.map((status, index) => (
-              <div key={index} className="bg-white shadow-lg rounded-lg p-4">
-                <h2 className="text-xl font-bold mb-2">
-                  Workout on {status.date}
-                </h2>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>Distance run: {status.distance}</li>
-                  <li>Number of push-ups: {status.pushups}</li>
-                  <li>Weight lifted: {status.weight}</li>
-                  <li>Description: {status.description}</li>
-                </ul>
-              </div>
-            ))}
-            </div>
-          </div>
-        </Layout>
-      );
+  useEffect(() => {
+    const fetchWorkoutStatuses = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/workoutStatus");
+        if (res.status === 200) {
+          setWorkoutStatuses(res.data);
+        }
+      } catch (error) {
+        toast.error("Failed to fetch workout statuses");
+      }
     };
-  
+    fetchWorkoutStatuses();
+  }, []);
+
+  const deleteWorkOut = async (status) => {
+    try {
+      await axios.delete(
+        `http://localhost:8080/workoutStatus/${status.statusId}`
+      );
+
+      setWorkoutStatuses((prevStatuses) =>
+        prevStatuses.filter((s) => s.statusId !== status.statusId)
+      );
+
+      toast.success("Workout status deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete workout status");
+    }
+  };
+
+  const navigateEditPage = (status) => {
+    navigate(`/CreateWorkoutStatus/${status.statusId}`);
+  };
+
+  return (
+    <div className="p-4">
+      <div className="flex justify-between items-center">
+        {/* <h1 className="text-3xl text-center font-semibold mb-4">
+          Workout Statuses
+        </h1> */}
+      </div>
+
+      <div className="space-y-4 flex justify-center flex-col items-center">
+        {workoutStatuses.map((status, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-lg rounded-lg p-4 w-[600px]"
+          >
+            <div className="flex justify-between ">
+              <div className="flex gap-3">
+                <div>
+                  <img
+                    src={status?.userProfile}
+                    alt="user"
+                    className="w-14 h-14 rounded-full"
+                  />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold">{status?.username}</h2>
+                  <p className="text-sm font-bold mb-2">
+                    Workout on {status.date}
+                  </p>
+                </div>
+              </div>
+              <div className="gap-3 flex">
+                {user?.id === status?.userId && (
+                  <>
+                    <AiFillDelete
+                      size={20}
+                      color="red"
+                      className="cursor-pointer"
+                      onClick={() => deleteWorkOut(status)}
+                    />
+                    <AiFillEdit
+                      size={20}
+                      color="blue"
+                      className="cursor-pointer"
+                      onClick={() => navigateEditPage(status)}
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+            <ul className="list-disc pl-5 space-y-1 mt-2">
+              <li>Distance run: {status.distance}</li>
+              <li>Number of push-ups: {status.pushUps}</li>
+              <li>Weight lifted: {status.weight}</li>
+              <li>Description: {status.description}</li>
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+    // </Layout>
+  );
+};
 
 export default WorkoutStatus;

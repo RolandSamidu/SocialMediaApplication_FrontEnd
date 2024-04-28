@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useState } from "react";
 
-
 const PostsList = ({
   post,
   user,
@@ -31,8 +30,8 @@ const PostsList = ({
       const res = await axios.post(
         `http://localhost:8080/posts/like?postId=${post.id}&userId=${user.id}`
       );
-
-     setReFetchPost(!reFetchPost);
+      console.log(res.data);
+      setReFetchPost(!reFetchPost);
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +44,7 @@ const PostsList = ({
   const deletePost = async (post) => {
     try {
       await axios.delete(`http://localhost:8080/posts/${post.id}`);
-       setReFetchPost(!reFetchPost);
+      setReFetchPost(!reFetchPost);
       toast.success("Post deleted successfully");
     } catch (error) {
       console.log(error);
